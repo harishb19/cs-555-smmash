@@ -4,7 +4,13 @@ import loginStyle from "./css/login.module.css"
 import {Formik} from "formik";
 import * as Yup from "yup";
 import React, {useEffect, useState} from "react";
-import {getAuth} from "firebase/auth";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithPopup
+} from "firebase/auth";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {Email, Google, Lock} from "@mui/icons-material";
@@ -47,14 +53,77 @@ const LoginContainer = ({setIsForgotPassword}) => {
 
     const handleUserCheck = (user) => {
 
-        //TODO
+        user.getIdTokenResult(true) // 1
+            .then((idTokenResult) => {
+                if (!("https://hasura.io/jwt/claims" in idTokenResult.claims) || idTokenResult.claims["https://hasura.io/jwt/claims"] === null) {
+                    navigate("/auth/signup")
+                    toast.info(`Please signup to continue`, {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    })
+                } else {
+                    navigate("/")
+                }
+            })
     }
     const handleSignInWithGoogle = () => {
-        //TODO
+        const provider = new GoogleAuthProvider();
+
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // The signed-in user info.
+                const user = result.user;
+                if (user) {
+                    handleUserCheck(user)
+                }
+
+
+            }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            // const email = error.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+            console.log(errorCode, errorMessage, credential)
+        });
     }
 
     const handleLogin = (value, setSubmitting, setFieldError) => {
-        //TODO
+        let localAuthDetails = {...value}
+        signInWithEmailAndPassword(auth, localAuthDetails.email, localAuthDetails.password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                handleUserCheck(user)
+            })
+            .catch((error) => {
+                switch (error.code) {
+                    case "auth/wrong-password":
+                        setFieldError("email", "Email or Password incorrect")
+                        setFieldError("password", "Email or Password incorrect")
+                        break;
+                    case "auth/user-not-found":
+                        setFieldError("email", "Email or Password incorrect")
+                        setFieldError("password", "Email or Password incorrect")
+                        break;
+                    default:
+                        setFieldError("password", "Email or Password incorrect")
+                        setFieldError("email", "Email or Password incorrect")
+
+                }
+
+                console.log(error.code)
+                setSubmitting(false)
+
+            })
     }
     return (
         <Box justifyContent='center' display='flex' alignItems='center' className={loginStyle.div}>
@@ -201,7 +270,15 @@ const ForgotContainer = ({setIsForgotPassword}) => {
     const auth = getAuth();
 
     const handleForgotPassword = (email) => {
-        //TODO
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                setIsForgotPassword(false)
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage)
+            });
     }
     return (
         <>

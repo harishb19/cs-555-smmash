@@ -21,6 +21,7 @@ import PageNotFound from "./Components/Error/PageNotFound";
 import ProtectedRoutes from "./Components/Auth/ProtectedRoutes";
 import LoginCheck from "./Components/Auth/LoginCheck";
 import {ToastProvider} from "react-toast-notifications";
+import PatientList from "./Components/Patient/PatientList";
 
 const theme = createTheme({
     palette: {
@@ -88,15 +89,16 @@ function App() {
                                 <AuthProvider>
                                     <NavWrapper>
                                         <Routes>
+
                                             <Route path="/" element={<ProtectedRoutes><Home/></ProtectedRoutes>}/>
 
                                             <Route path="/auth/login" element={<LoginCheck><Login/></LoginCheck>}/>
                                             <Route path="/auth/login/doctor"
-                                                   element={<LoginCheck><Login/></LoginCheck>}/>
+                                                   element={<LoginCheck><Login type={'doctor'}/></LoginCheck>}/>
                                             <Route path="/auth/signup" element={<LoginCheck><Signup/></LoginCheck>}/>
                                             <Route path="/auth/signup/doctor"
-                                                   element={<LoginCheck><Signup/></LoginCheck>}/>
-
+                                                   element={<LoginCheck><Signup type={'doctor'}/></LoginCheck>}/>
+                                            <Route path='/patients/new' element={<ProtectedRoutes><PatientList/></ProtectedRoutes>}/>
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>
