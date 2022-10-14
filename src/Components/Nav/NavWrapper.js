@@ -13,7 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
-import {AccountCircle, Home, Login, Logout} from "@mui/icons-material";
+import {AccountCircle, Home, Login, Logout, PeopleAlt} from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";
 import {Button, Tooltip, useMediaQuery} from "@mui/material";
@@ -111,7 +111,25 @@ const NormalNav = ({children}) => {
                 </ListItemButton>
 
                 {userDetails && userDetails.id && <>
-
+                    {
+                        userDetails.role.name === "admin" &&<ListItemButton
+                            sx={{
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                            }}
+                            onClick={() => navigate("/patients/new")}
+                        >
+                            <Tooltip title={"Patient list"} placement={"right"}>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                    }}
+                                >
+                                    <PeopleAlt/>
+                                </ListItemIcon>
+                            </Tooltip>
+                            <ListItemText primary={"Patient list"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>
+                    }
 
                     <ListItemButton
                         sx={{
