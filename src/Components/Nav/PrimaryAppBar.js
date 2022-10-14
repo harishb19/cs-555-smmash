@@ -5,11 +5,12 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import {Avatar, Button, ListItemButton, ListItemIcon, useMediaQuery} from "@mui/material";
+import {Avatar, Button, ListItemButton, ListItemIcon, Menu, MenuItem, Tooltip, useMediaQuery} from "@mui/material";
 import {useStoreActions, useStoreState} from "easy-peasy";
 import {useNavigate} from "react-router-dom";
 import ListItemText from "@mui/material/ListItemText";
 import {useTheme} from "@mui/material/styles";
+import {AdminPanelSettings, Person} from "@mui/icons-material";
 
 function stringAvatar(name) {
     if (name.split(' ')[0][0] && name.split(' ')[1][0]) {
@@ -84,9 +85,15 @@ export const UserProfile = ({sx}) => {
 
 const PrimaryAppBar = ({onClick, open}) => {
     const navigate = useNavigate()
-    const matches = useMediaQuery('(max-width:600px)');
     const userDetails = useStoreState(state => state.user.userDetails)
-
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openMenu = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const handleProfileMenuOpen = () => {
         navigate('/profile')
     };
@@ -108,9 +115,12 @@ const PrimaryAppBar = ({onClick, open}) => {
                     onClick={() => {
                         navigate("/")
                     }}
-            >{matches ? <img src={"/stonks-rocket.png"} height={60} alt={"stonks"}/> :
-                <img src={"/stonks_logo_alt_white.png"} height={60}
-                     alt={"smmash"}/>}
+                    sx={{
+                        color: "white !important",
+                    }
+                    }
+            >
+            SMMASH
 
             </Button>
 
@@ -121,16 +131,63 @@ const PrimaryAppBar = ({onClick, open}) => {
                         <NotificationBadge/>
 
                     </div>
-                    <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
+                    <Tooltip title="Account settings">
+
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            aria-label="account of current user"
+                            onClick={handleClick}
+                            color="inherit"
+                            aria-controls={openMenu ? 'account-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openMenu ? 'true' : undefined}
+                        >
+                            <UserProfile/>
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={openMenu}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                            elevation: 0,
+                            sx: {
+                                overflow: 'visible',
+                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                mt: 1.5,
+                                '& .MuiAvatar-root': {
+                                    width: 32,
+                                    height: 32,
+                                    ml: -0.5,
+                                    mr: 1,
+                                },
+                                '&:before': {
+                                    content: '""',
+                                    display: 'block',
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 14,
+                                    width: 10,
+                                    height: 10,
+                                    bgcolor: 'background.paper',
+                                    transform: 'translateY(-50%) rotate(45deg)',
+                                    zIndex: 0,
+                                },
+                            },
+                        }}
+                        transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                     >
-                        <UserProfile/>
-                    </IconButton>
+                        <MenuItem onClick={()=>handleProfileMenuOpen()}>
+                            <Person/> Profile
+                        </MenuItem>
+                        <MenuItem>
+                            <AdminPanelSettings/> {userDetails.role.name}
+                        </MenuItem>
+                    </Menu>
                 </Box>
 
             </>}

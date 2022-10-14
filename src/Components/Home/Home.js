@@ -1,10 +1,7 @@
-import {Box, Typography} from "@mui/material";
-
-const Home=()=>{
-    return(
-        <Box>
-            <Typography variant="h1">Home</Typography>
-        </Box>
-    )
+const Home = () => {
+    return (<div>
+            <h1>Home</h1>
+        </div>)
 }
-export default Home
+
+export default Home;

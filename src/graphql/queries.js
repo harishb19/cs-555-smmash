@@ -44,3 +44,14 @@ export const LOGIN_DOCTOR = gql`
     }
 
 `
+export const GET_PENDING_PATIENTS = gql`
+    query getPendingUsers{
+        users(where:{status:{_eq:"pending"},roleId:{_eq:2}}){
+            id
+            firstName
+            lastName
+            email
+            createdAt
+        }
+    }
+`

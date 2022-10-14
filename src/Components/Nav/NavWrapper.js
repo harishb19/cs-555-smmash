@@ -13,10 +13,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
-import {AccountCircle, Home, Login, Logout, PeopleAlt} from "@mui/icons-material";
+import {AccountBalanceWallet, AccountCircle, Home, Login, Logout, PeopleAlt} from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";
 import {Button, Tooltip, useMediaQuery} from "@mui/material";
+import {getAuth, signOut} from "firebase/auth";
+import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 
 const drawerWidth = 240;
@@ -74,7 +76,32 @@ const NormalNav = ({children}) => {
     };
     const handleAuth = () => {
         if (userDetails && userDetails.id) {
-            //TODO: add logout logic
+            const auth = getAuth()
+            signOut(auth).then(() => {
+                navigate("/")
+                window.location.reload();
+                toast.success(`See you soon!`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+
+            }).catch((error) => {
+                console.log(error)
+                toast.error(`Error logging out`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            });
 
         } else {
             navigate("/auth/login")
@@ -131,6 +158,7 @@ const NormalNav = ({children}) => {
                         </ListItemButton>
                     }
 
+
                     <ListItemButton
                         sx={{
                             minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
@@ -185,6 +213,7 @@ const NormalNav = ({children}) => {
 }
 const AuthNav = ({children}) => {
     const navigate = useNavigate()
+    const matches = useMediaQuery('(max-width:600px)');
 
     return (<>
         <AppBar position="fixed">
@@ -195,7 +224,9 @@ const AuthNav = ({children}) => {
                                 navigate("/")
                             }}
                     >
-                        SMMASH
+                        {matches ? <img src={"/stonks-rocket.png"} height={60} alt={"stonks"}/> :
+                            <img src={"/stonks_logo_alt_white.png"} height={60}
+                                 alt={"smmash"}/>}
                     </Button>
 
                 </Toolbar>
