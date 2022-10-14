@@ -14,8 +14,12 @@ import {
 import loginStyle from "./css/login.module.css"
 import {Formik} from "formik";
 import * as Yup from "yup";
+import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
 import React, {useEffect, useState} from "react";
+import {useMutation} from "@apollo/client";
+import {SIGNUP_DOCTOR, SIGNUP_USER} from "../../graphql/mutation";
 import "yup-phone";
+import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {Badge, CalendarMonth, Email, Google, LocalPhone, Lock} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
@@ -26,6 +30,7 @@ const Signup = ({type}) => {
     if (userDetails && userDetails.id) {
         navigate("/")
     }
+    const auth = getAuth();
     const regex = /^[0-9]{10}$/
     const passwordValidation = {
         firstName: Yup.string().required("First name is required"),
@@ -59,19 +64,148 @@ const Signup = ({type}) => {
         dateOfBirth: ""
     })
     const [isGoogleAuth, setIsGoogleAuth] = useState(false)
+    const [firebaseUid, setFirebaseUid] = useState("")
 
+    const [insertUser] = useMutation(type && type === 'doctor' ? SIGNUP_DOCTOR : SIGNUP_USER)
 
     const handleSignupWithGoogle = () => {
-        //logic here
+
+        const provider = new GoogleAuthProvider();
+
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                // const credential = GoogleAuthProvider.credentialFromResult(result);
+                // const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                console.log("signup", user)
+                if (user) {
+                    let name = user.displayName
+                    const nameArray = name.split(" ");
+                    setFirebaseUid(user.uid)
+                    setInitialValue({
+                        firstName: nameArray && nameArray[0],
+                        lastName: nameArray && nameArray[1],
+                        email: user.email,
+                        phoneNumber: user.phoneNumber,
+                    })
+                }
+                setIsGoogleAuth(true)
+
+                // ...
+            }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            // const email = error.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+            console.log(errorCode, errorMessage, credential)
+        });
     }
     const handleSignup = (value, {setFieldError, setSubmitting}) => {
         setSubmitting(true)
+        const localUserDetails = {...value}
+        if (isGoogleAuth) {
+            handleInsertUser({
+                firstName: localUserDetails.firstName,
+                lastName: localUserDetails.lastName,
+                email: localUserDetails.email,
+                firebaseUid: firebaseUid,
+                phoneNumber: localUserDetails.phoneNumber,
+                gender: localUserDetails.gender,
+                dateOfBirth: localUserDetails.dateOfBirth
+            }, setSubmitting)
+        } else {
+            createUserWithEmailAndPassword(auth, localUserDetails.email, localUserDetails.password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    handleInsertUser({
+                        firstName: localUserDetails.firstName,
+                        lastName: localUserDetails.lastName,
+                        email: localUserDetails.email,
+                        firebaseUid: user.uid,
+                        phoneNumber: localUserDetails.phoneNumber,
+                        gender: localUserDetails.gender,
+                        dateOfBirth: localUserDetails.dateOfBirth
+                    }, setSubmitting)
+                })
+                .catch((error) => {
+                    if (error.code.match("auth/email-already-in-use")) {
+                        setFieldError("email", "Email already in use.")
+                    } else {
+                        //TODO add error toast
+                        console.log(error.message)
+                    }
+                    setSubmitting(false)
 
-        //logic here
+                })
+        }
 
     }
     const handleInsertUser = (userDetails, setSubmitting) => {
-        //logic here
+        insertUser({
+            variables: {
+                ...userDetails
+            }
+        }).then((response) => {
+            const key = `signUp${type && type === 'doctor' ? 'Doctor' : 'Patient'}`
+            if (response && response.data && response.data[key] && response.data[key].userId) {
+
+                navigate("/auth/login")
+                toast.success(`Sign up successful. Login to continue!`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+                setSubmitting(false)
+
+            } else {
+                setSubmitting(false)
+
+                if (response && response.data && response.data[key] && response.data[key].message) {
+                    toast.error(response.data[key].message, {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    })
+                } else {
+                    throw new Error("Something went wrong")
+                }
+
+
+            }
+        }).catch((error) => {
+            console.log(error.message)
+            setSubmitting(false)
+            toast.error("Something went wrong", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+            signOut(auth).then(r => {
+                console.log("signout")
+            }).catch((e) => {
+                //TODO add error toast
+                console.log(e)
+            })
+        })
     }
     useEffect(() => {
         console.log("initialValue", initialValue)
