@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {useEffect} from "react";
 
-const ProtectedRoutes = ({children}) => {
+const ProtectedRoutes = ({children,role}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const navigate = useNavigate()
 
@@ -23,6 +23,10 @@ const ProtectedRoutes = ({children}) => {
     }, [navigate, userDetails])
     if (!userDetails || !userDetails.id) {
 
+        return null
+    }
+    if (role && userDetails && userDetails.role && userDetails.role.name !== role) {
+        console.log("-> test", role , userDetails , userDetails.role , userDetails.role.name !== role);
         return null
     }
     return children
