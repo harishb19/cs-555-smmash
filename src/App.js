@@ -88,15 +88,15 @@ function App() {
                                 <AuthProvider>
                                     <NavWrapper>
                                         <Routes>
+
                                             <Route path="/" element={<ProtectedRoutes><Home/></ProtectedRoutes>}/>
 
                                             <Route path="/auth/login" element={<LoginCheck><Login/></LoginCheck>}/>
                                             <Route path="/auth/login/doctor"
-                                                   element={<LoginCheck><Login/></LoginCheck>}/>
+                                                   element={<LoginCheck><Login type={'doctor'}/></LoginCheck>}/>
                                             <Route path="/auth/signup" element={<LoginCheck><Signup/></LoginCheck>}/>
                                             <Route path="/auth/signup/doctor"
-                                                   element={<LoginCheck><Signup/></LoginCheck>}/>
-
+                                                   element={<LoginCheck><Signup type={'doctor'}/></LoginCheck>}/>
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>
