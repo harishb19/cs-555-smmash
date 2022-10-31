@@ -1,39 +1,32 @@
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {Autocomplete, Button, Grid, InputAdornment, InputLabel, TextField} from "@mui/material";
+import {Autocomplete, Box, Button, Grid, InputAdornment, InputLabel, TextField} from "@mui/material";
 import loginStyle from "../Auth/css/login.module.css";
 import React, {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
 import Loading from "../Loading/Loading";
 import Error from "../Error/CustomError";
 import {GET_VACINES} from "../../graphql/queries";
-import {useStoreState} from "easy-peasy";
-import {INSERT_RECORDS} from "../../graphql/mutation";
+import {UPDATE_RECORD} from "../../graphql/mutation";
 import {toast} from "react-toastify";
 import {CalendarMonth} from "@mui/icons-material";
+import {isEmpty} from "lodash";
+import {format} from "date-fns";
 
-const AddRecords = ({patientId,refetch}) => {
-    const userDetails = useStoreState(state => state.user.userDetails)
+const EditRecords = ({editDetails, refetch}) => {
     const [vaccines, setVaccines] = useState([]);
+    const [initialValues, setInitialValues] = useState({})
     const {data, loading, error} = useQuery(GET_VACINES)
-    const [insertRecord] = useMutation(INSERT_RECORDS)
+    const [updateRecord] = useMutation(UPDATE_RECORD)
     const validateSchema = {}
     const handleSubmit = (value, {setFieldError, setSubmitting}) => {
         setSubmitting(true)
-        let insertData = []
-        console.log("-> value", value);
-        console.log("-> userDetails", userDetails);
-        value.dosage.forEach((dosage) => {
-            insertData.push({
-                dosageId: dosage.id,
-                dosageInformation: value.dosageInformation,
-                patientId: patientId??userDetails.patients[0].id,
-                doctorId: patientId?userDetails.id:userDetails.patients[0].doctorId
-            })
-        })
-        console.log("-> insertData", insertData);
-        insertRecord({variables: {objects: insertData}}).then(res => {
-            toast.success(`Records inserted`, {
+        updateRecord({
+            variables: {
+                "id": editDetails.id, "dosageId": value.dosage.id, "dosageInformation": value.dosageInformation
+            }
+        }).then(res => {
+            toast.success(`Records updated`, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: true,
@@ -72,41 +65,50 @@ const AddRecords = ({patientId,refetch}) => {
             setVaccines([...localVaccines])
         }
     }, [data, loading])
+    useEffect(() => {
+        if (editDetails && !isEmpty(editDetails)) {
+            setInitialValues({
+                dosage: editDetails.dosage,
+                dosageInformation: format(new Date(editDetails.dosageInformation),'yyyy-MM-dd')
+            })
+        }
+    }, [editDetails])
     if (loading) return <Loading/>
     if (error) return <Error error={error}/>
-    return (<Formik
-        initialValues={{}}
-        onSubmit={handleSubmit}
-        enableReinitialize={true}
-        validationSchema={Yup.object().shape({...validateSchema})}
-    >
-        {(props) => {
-            const {
-                values, touched, errors, dirty, handleChange, handleBlur, handleSubmit, isValid, isSubmitting
-            } = props;
-            return (<form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6} lg={6}>
-                        <Autocomplete
-                            disablePortal
-                            id="Vaccine"
-                            fullWidth
-                            multiple
-                            value={values.vaccine}
-                            name={"dosage"}
-                            onChange={(event, newValue) => {
-                                props.setFieldValue("dosage", newValue);
-                            }}
-                            options={vaccines}
-                            getOptionLabel={(option) => `${option.vaccineName} - Dose ${option.doseNumber}`}
-                            renderInput={(params) => <TextField {...params} label="Vaccine"/>}
-                            sx={{
-                                width: 400,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={12}/>
-                    <Grid item xs={12} md={6} lg={6}>
+    if (initialValues && !isEmpty(initialValues)) {
+        return (<Formik
+            initialValues={{...initialValues}}
+            onSubmit={handleSubmit}
+            enableReinitialize={true}
+            validationSchema={Yup.object().shape({...validateSchema})}
+        >
+            {(props) => {
+                const {
+                    values, touched, errors, dirty, handleChange, handleBlur, handleSubmit, isValid, isSubmitting
+                } = props;
+                return (<form onSubmit={handleSubmit}>
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6} lg={6}>
+                            <Autocomplete
+                                disablePortal
+                                id="Vaccine"
+                                fullWidth
+                                value={values.dosage}
+                                name={"dosage"}
+                                onChange={(event, newValue) => {
+                                    props.setFieldValue("dosage", newValue);
+                                }}
+                                options={vaccines}
+                                getOptionLabel={(option) => `${option.vaccineName ?? option.vaccine.vaccineName} - Dose ${option.doseNumber}`}
+                                renderInput={(params) => <TextField {...params} label="Vaccine"/>}
+                                sx={{
+                                    width: 400,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={12}/>
+                        <Grid item xs={12} md={6} lg={6}>
                             <InputLabel htmlFor="dosageInformation">Date of vaccine</InputLabel>
                             <TextField
                                 type="date"
@@ -130,22 +132,24 @@ const AddRecords = ({patientId,refetch}) => {
                         </Grid>
 
 
-                    <Grid item xs={12}>
-                        <Button variant={"contained"} color={"secondary"}
-                                className={`${loginStyle.button}`}
-                                disabled={isSubmitting || !(isValid && dirty)}
-                                type={"submit"}
-                        >
-                            Save
-                        </Button>
+                        <Grid item xs={12}>
+                            <Button variant={"contained"} color={"secondary"}
+                                    className={`${loginStyle.button}`}
+                                    disabled={isSubmitting || !(isValid && dirty)}
+                                    type={"submit"}
+                            >
+                                Save
+                            </Button>
 
+                        </Grid>
                     </Grid>
-                </Grid>
 
 
-            </form>)
-        }}
+                </form>)
+            }}
 
-    </Formik>)
+        </Formik>)
+    }
+    return <Loading/>
 }
-export default AddRecords;
+export default EditRecords;
