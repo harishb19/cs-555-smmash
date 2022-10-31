@@ -20,6 +20,7 @@ import {
 import {Add, Delete, Edit} from "@mui/icons-material";
 import AddRecords from "./AddRecords";
 import {toast} from "react-toastify";
+import {DELETE_RECORD} from "../../graphql/mutation";
 import EditRecords from "./EditRecords";
 import {isEmpty} from "lodash";
 import {format} from "date-fns";
@@ -28,13 +29,41 @@ const PreviousRecords = ({patientId}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const [records, setRecords] = useState([]);
     const [open, setOpen] = useState(false);
+    const [deleteRecord] = useMutation(DELETE_RECORD)
     const [editDetails, setEditDetails] = useState({})
     const {data, loading, error, refetch} = useQuery(GET_PATIENT_RECORDS, {
         variables: {
             patientId: patientId ?? userDetails.id
         }
     })
-    
+    const handleDelete = (id) => {
+        deleteRecord({variables: {id: id}})
+            .then(() => {
+                toast.success(`Record deleted`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+                refetch()
+
+            }).catch(err => {
+                console.log(err)
+                toast.error(err.message, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }
+        )
+    }
     useEffect(() => {
         if (data && !loading) {
             setRecords([...data.records])
@@ -57,7 +86,14 @@ const PreviousRecords = ({patientId}) => {
                                 <Edit/>
                             </IconButton>
                         </Tooltip>
-                        
+                        <Tooltip title="Delete records">
+                            <IconButton aria-label="delete"
+                                        onClick={() => handleDelete(record.id)}
+
+                            >
+                                <Delete/>
+                            </IconButton>
+                        </Tooltip>
                     </Stack>}>
                     <ListItemText
                         primary={record.dosage.vaccine.vaccineName + " " + record.dosage.doseNumber}
