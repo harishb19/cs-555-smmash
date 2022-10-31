@@ -5,7 +5,7 @@ import AdminAccount from "../Admin/AdminAccount";
 
 const AccountWrapper = () => {
     const userDetails = useStoreState(state => state.user.userDetails)
-    console.log("-> userDetails", userDetails);
+
     switch (userDetails.roleId) {
         case 3:
             return <AdminAccount/>
