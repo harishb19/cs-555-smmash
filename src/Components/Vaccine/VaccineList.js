@@ -21,7 +21,12 @@ const Vaccine = ({vaccine}) => {
 
 const VaccineList = () => {
     const [vaccines, setVaccines] = useState([]);
-
+    const {data, loading, error} = useQuery(GET_VACCINE_LIST);
+    useEffect(() => {
+        if (!loading && data) {
+            setVaccines(data.vaccines)
+        }
+    }, [data, loading])
     if (loading) return <Loading/>;
     if (error) return <Error message={error.message}/>;
     return (<>
