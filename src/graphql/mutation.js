@@ -58,19 +58,3 @@ export const INSERT_RECORDS = gql`
     }
 
 `
-
-export const DELETE_RECORD = gql`
-    mutation deleteRecord($id: bigint!) {
-        delete_records_by_pk(id: $id) {
-            id
-        }
-    }
-`
-
-export const UPDATE_RECORD = gql`
-    mutation updateRecord($id: bigint!, $dosageId: bigint!, $dosageInformation: timestamptz!) {
-        update_records_by_pk(pk_columns: {id: $id}, _set: {dosageId: $dosageId, dosageInformation: $dosageInformation}) {
-            id
-        }
-    }
-`
