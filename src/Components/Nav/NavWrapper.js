@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
 import {
     AccountBalanceWallet,
-    AccountCircle,
+    AccountCircle, Dvr,
     FactCheck,
     Healing,
     Home,
@@ -185,6 +185,26 @@ const NormalNav = ({children}) => {
                                 </ListItemIcon>
                             </Tooltip>
                             <ListItemText primary={"Records list"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>
+                    }
+                    {
+                        userDetails.roleId === 1 &&
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                            }}
+                            onClick={() => navigate("/patients/list")}
+                        >
+                            <Tooltip title={"Patient list"} placement={"right"}>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                    }}
+                                >
+                                    <Dvr/>
+                                </ListItemIcon>
+                            </Tooltip>
+                            <ListItemText primary={"Patient list"} sx={{opacity: open ? 1 : 0}}/>
                         </ListItemButton>
                     }
                     <ListItemButton

@@ -8,13 +8,13 @@ import {Dialog, DialogContent, DialogContentText, DialogTitle, Fab, List, ListIt
 import {Add} from "@mui/icons-material";
 import AddRecords from "./AddRecords";
 
-const PreviousRecords = () => {
+const PreviousRecords = ({patientId}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const [records, setRecords] = useState([]);
     const [open, setOpen] = useState(false);
-    const {data, loading, error,refetch} = useQuery(GET_PATIENT_RECORDS, {
+    const {data, loading, error, refetch} = useQuery(GET_PATIENT_RECORDS, {
         variables: {
-            patientId: userDetails.id
+            patientId: patientId ?? userDetails.id
         }
     })
 
@@ -25,12 +25,25 @@ const PreviousRecords = () => {
     }, [data, loading])
     if (loading) return <Loading/>
     if (error) return <Error error={error}/>
+
+    if (patientId){
+        return (<>
+            <List>
+                {records.map(record => <ListItem key={record.id}>
+                    <ListItemText
+                        primary={record.dosage.vaccine.vaccineName + " " + record.dosage.doseNumber}
+                        secondary={`${record.dosageInformation}`}
+                    />
+                </ListItem>)}
+            </List>
+        </>)
+    }
     return (<>
         <h2>Records</h2>
         <List>
             {records.map((record) => (<ListItem
                 sx={{
-                    border:1
+                    border: 1
                 }}
                 key={record.id}>
                 <ListItemText
@@ -54,7 +67,7 @@ const PreviousRecords = () => {
         <Fab variant="extended" sx={{
             position: "fixed", bottom: 10, right: 10
         }}
-        onClick={() => setOpen(!open)}>
+             onClick={() => setOpen(!open)}>
 
             <Add sx={{mr: 1}}/>
             Records

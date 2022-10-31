@@ -25,6 +25,7 @@ import UsersList from "./Components/Users/UsersList";
 import AccountWrapper from "./Components/Auth/AccountWrapper";
 import PreviousRecords from "./Components/Patient/PreviousRecords";
 import VaccineList from "./Components/Vaccine/VaccineList";
+import PatientList from "./Components/Patient/PatientList";
 
 const theme = createTheme({
     palette: {
@@ -104,7 +105,7 @@ function App() {
                                             <Route path='/patients/new'
                                                    element={<ProtectedRoutes><UsersList/></ProtectedRoutes>}/>
                                             <Route path='/patients/list' element={<ProtectedRoutes
-                                                role={'doctor'}><UsersList/></ProtectedRoutes>}/>
+                                                role={'doctor'}><PatientList/></ProtectedRoutes>}/>
                                             <Route path='/records/list' element={<ProtectedRoutes
                                                 role={'patient'}><PreviousRecords/></ProtectedRoutes>}/>
                                             <Route path='/profile'
