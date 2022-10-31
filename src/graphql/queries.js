@@ -14,12 +14,21 @@ export const LOGIN_USER = gql`
                 phoneNumber
                 createdAt
                 updatedAt
-                role{
+                roleId
+                role {
                     name
+                }
+                doctor {
+                    doctorId
+                }
+                patients {
+                    id
+                    doctorId
                 }
             }
         }
     }
+
 
 `
 export const LOGIN_DOCTOR = gql`
@@ -54,4 +63,40 @@ export const GET_PENDING_PATIENTS = gql`
             createdAt
         }
     }
+`
+
+export const GET_PATIENT_RECORDS = gql`
+    query getRecords($patientId: bigint!) {
+        records(where: {patient: {parentId: {_eq: $patientId}}}) {
+            id
+            doctor {
+                user {
+                    firstName
+                    lastName
+                }
+            }
+            dosageInformation
+            dosage {
+                doseNumber
+                vaccine {
+                    vaccineName
+                }
+            }
+        }
+    }
+
+`
+
+export const GET_VACINES = gql`
+    query vaccine {
+        vaccines {
+            dosages {
+                id
+                doseNumber
+            }
+            vaccineName
+        }
+    }
+
+
 `

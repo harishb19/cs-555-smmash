@@ -13,7 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
-import {AccountBalanceWallet, AccountCircle, Home, Login, Logout, PeopleAlt} from "@mui/icons-material";
+import {AccountBalanceWallet, AccountCircle, Healing, Home, Login, Logout, PeopleAlt} from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";
 import {Button, Tooltip, useMediaQuery} from "@mui/material";
@@ -158,7 +158,26 @@ const NormalNav = ({children}) => {
                         </ListItemButton>
                     }
 
-
+                    {
+                        userDetails.roleId === 2 &&
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                            }}
+                            onClick={() => navigate("/records/list")}
+                        >
+                            <Tooltip title={"Records list"} placement={"right"}>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                    }}
+                                >
+                                   <Healing/>
+                                </ListItemIcon>
+                            </Tooltip>
+                            <ListItemText primary={"Records list"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>
+                    }
                     <ListItemButton
                         sx={{
                             minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,

@@ -41,3 +41,20 @@ export const CHANGE_PATIENT_STATUS = gql`
     }
 
 `
+export const CHANGE_DOCTOR_STATUS = gql`
+    mutation Mutation($userId: bigint!, $status: String!) {
+        update_users_by_pk(pk_columns: {id: $userId}, _set: {status: $status,roleId:1}) {
+            id
+        }
+    }
+
+`
+
+export const INSERT_RECORDS = gql`
+    mutation insertRecords($objects: [records_insert_input!]!) {
+        insert_records(objects: $objects) {
+            affected_rows
+        }
+    }
+
+`

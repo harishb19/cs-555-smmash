@@ -131,7 +131,7 @@ const PrimaryAppBar = ({onClick, open}) => {
                         <NotificationBadge/>
 
                     </div>
-                    <Tooltip title="Account settings">
+                    <Tooltip title="DoctorAccount settings">
 
                         <IconButton
                             size="large"
