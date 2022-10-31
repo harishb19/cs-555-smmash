@@ -100,3 +100,17 @@ export const GET_VACINES = gql`
 
 
 `
+export const GET_VACCINE_LIST = gql`
+    query getVaccineList{
+      vaccines{
+        id
+        vaccineName
+        sideEffect
+        dosages{
+          doseNumber
+          startTimeMos
+          endTimeMos
+        }
+      }
+    }
+`
