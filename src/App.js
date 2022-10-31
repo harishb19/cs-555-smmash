@@ -24,6 +24,7 @@ import {ToastProvider} from "react-toast-notifications";
 import UsersList from "./Components/Users/UsersList";
 import AccountWrapper from "./Components/Auth/AccountWrapper";
 import PreviousRecords from "./Components/Patient/PreviousRecords";
+import VaccineList from "./Components/Vaccine/VaccineList";
 
 const theme = createTheme({
     palette: {
@@ -108,6 +109,8 @@ function App() {
                                                 role={'patient'}><PreviousRecords/></ProtectedRoutes>}/>
                                             <Route path='/profile'
                                                    element={<ProtectedRoutes><AccountWrapper/></ProtectedRoutes>}/>
+                                            <Route path='/vaccine' element={<ProtectedRoutes><VaccineList/></ProtectedRoutes>}/>
+
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>
