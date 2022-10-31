@@ -12,7 +12,7 @@ import {INSERT_RECORDS} from "../../graphql/mutation";
 import {toast} from "react-toastify";
 import {CalendarMonth} from "@mui/icons-material";
 
-const AddRecords = ({refetch}) => {
+const AddRecords = ({patientId,refetch}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const [vaccines, setVaccines] = useState([]);
     const {data, loading, error} = useQuery(GET_VACINES)
@@ -27,8 +27,8 @@ const AddRecords = ({refetch}) => {
             insertData.push({
                 dosageId: dosage.id,
                 dosageInformation: value.dosageInformation,
-                patientId: userDetails.patients[0].id,
-                doctorId: userDetails.patients[0].doctorId
+                patientId: patientId??userDetails.patients[0].id,
+                doctorId: patientId?userDetails.id:userDetails.patients[0].doctorId
             })
         })
         console.log("-> insertData", insertData);

@@ -17,22 +17,25 @@ import {
     TextField,
     Tooltip
 } from "@mui/material";
-import {FactCheck} from "@mui/icons-material";
+import {AddBox, FactCheck} from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import PreviousRecords from "./PreviousRecords";
-import {differenceInMonths, differenceInYears, parse} from "date-fns";
+import {differenceInMonths, differenceInYears} from "date-fns";
+import AddRecords from "./AddRecords";
 
 const Patient = ({patient, refetch}) => {
     const [openDetails, setOpenDetails] = useState(false)
     const [openRecord, setOpenRecord] = useState(false)
+    const [openNewRecord, setOpenNewRecord] = useState(false)
 
-    function calculateAge(dob) {
+    const calculateAge = (dob) => {
         let age = differenceInYears(new Date(), new Date(dob));
-        if (!age){
-            age=differenceInMonths(new Date(), new Date(dob))
+        if (!age) {
+            age = differenceInMonths(new Date(), new Date(dob))
         }
         return age;
     }
+
     return (<>
 
         <ListItem
@@ -48,9 +51,17 @@ const Patient = ({patient, refetch}) => {
                         <FactCheck/>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="new records">
+                    <IconButton aria-label="new"
+                                onClick={() => setOpenNewRecord(true)}
+
+                    >
+                        <AddBox/>
+                    </IconButton>
+                </Tooltip>
             </Stack>}
         >
-            <ListItemButton             onClick={() => setOpenDetails(true)}
+            <ListItemButton onClick={() => setOpenDetails(true)}
             >
                 <ListItemText
                     primary={patient.firstName + " " + patient.lastName}
@@ -66,11 +77,16 @@ const Patient = ({patient, refetch}) => {
             <DialogContent>
                 <PreviousRecords patientId={patient.parentId}/>
             </DialogContent>
-
+        </Dialog>
+        <Dialog onClose={() => setOpenNewRecord(!openNewRecord)} open={openNewRecord}>
+            <DialogTitle>New Record</DialogTitle>
+            <DialogContent>
+                <AddRecords patientId={patient.id} refetch={refetch}/>
+            </DialogContent>
         </Dialog>
         <Dialog onClose={() => setOpenDetails(!openDetails)} open={openDetails}>
             <DialogTitle>Details</DialogTitle>
-            <DialogContent sx={{padding:1}}>
+            <DialogContent sx={{padding: 1}}>
                 <Grid container spacing={2} mt={1}>
                     <Grid item xs={12} md={6}>
                         <TextField
