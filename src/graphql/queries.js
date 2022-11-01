@@ -77,6 +77,29 @@ export const GET_PATIENT_RECORDS = gql`
             }
             dosageInformation
             dosage {
+                id
+                doseNumber
+                vaccine {
+                    vaccineName
+                }
+            }
+        }
+    }
+
+`
+export const GET_PATIENT_RECORDS_SUB = gql`
+    subscription getRecords($patientId: bigint!) {
+        records(where: {patient: {parentId: {_eq: $patientId}}}) {
+            id
+            doctor {
+                user {
+                    firstName
+                    lastName
+                }
+            }
+            dosageInformation
+            dosage {
+                id
                 doseNumber
                 vaccine {
                     vaccineName
@@ -113,4 +136,25 @@ export const GET_VACCINE_LIST = gql`
         }
       }
     }
+`
+
+export const GET_PATIENTS = gql`
+    query getPatients($doctorId: bigint!) {
+        patient(where: {doctorId: {_eq: $doctorId}}) {
+            id
+            firstName
+            lastName
+            dateOfBirth
+            gender
+            parentId
+            user{
+                id
+                firstName
+                lastName
+                phoneNumber
+                email
+            }
+        }
+    }
+
 `

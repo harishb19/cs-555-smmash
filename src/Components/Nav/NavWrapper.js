@@ -167,6 +167,26 @@ const NormalNav = ({children}) => {
                     }
 
                     {
+                        userDetails.role.name === "doctor" && <ListItemButton
+                            sx={{
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                            }}
+                            onClick={() => navigate("/patients/list")}
+                        >
+                            <Tooltip title={"Records list"} placement={"right"}>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                    }}
+                                >
+                                    <Healing/>
+                                </ListItemIcon>
+                            </Tooltip>
+                            <ListItemText primary={"Records list"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>
+
+                    }
+                    {
                         userDetails.roleId === 2 &&
                         <ListItemButton
                             sx={{
