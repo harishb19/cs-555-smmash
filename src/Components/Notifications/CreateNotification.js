@@ -1,5 +1,5 @@
-import { GET_PATIENTS} from "../../graphql/queries";
-import {useMutation, useQuery} from "@apollo/client";
+import {GET_PATIENTS} from "../../graphql/queries";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import Loading from "../Loading/Loading";
 import Error from "../Error/CustomError";
 import React, {useEffect, useState} from "react";
@@ -10,19 +10,18 @@ import loginStyle from "../Auth/css/login.module.css";
 import {useStoreState} from "easy-peasy";
 import {toast} from "react-toastify";
 import {CREATE_NOTIFICATION} from "../../graphql/mutation";
+import {useToasts} from "react-toast-notifications";
 
 const CreateNotification = () => {
+    const {addToast} = useToasts()
+
     const [patients, setPatients] = useState([])
     const userDetails = useStoreState(state => state.user.userDetails)
-    const [data, loading, error, refetch] = useQuery(GET_PATIENTS, {
-        variables: {
-            doctorId: userDetails.roleId === 0 ? null : userDetails.id
-        }
-    });
+    const [fetchPatient, {data, loading, error}] = useLazyQuery(GET_PATIENTS);
     const [sendNotification] = useMutation(CREATE_NOTIFICATION)
     useEffect(() => {
-        if (!loading && data) {
-            if (data.patients.length > 0) {
+        if (!loading && data && data.patient) {
+            if (data.patient.length > 0) {
                 setPatients([...data.patient, {firstName: "All", lastName: "Patients", id: "all", parentId: "all"}])
 
             } else {
@@ -31,6 +30,15 @@ const CreateNotification = () => {
             }
         }
     }, [data, loading])
+    useEffect(() => {
+        if (userDetails && userDetails.id) {
+            fetchPatient({
+                variables: {
+                    doctorId: userDetails.roleId === 0 ? null : userDetails.id
+                }
+            })
+        }
+    }, [userDetails])
 
     const handleSubmit = (values, {setSubmitting, resetForm}) => {
         setSubmitting(true)
@@ -39,14 +47,14 @@ const CreateNotification = () => {
         }
         if (values.recivers.id === "all") {
             if (userDetails.roleId === 3) {
-                values.recivers = 0
+                insertData.recivers = 0
             } else {
-                values.recivers = 1
-                values.userId = userDetails.id
+                insertData.recivers = 1
+                insertData.userId = userDetails.id
             }
         } else {
-            values.recivers = 2
-            values.userId = values.recivers.parentId
+            insertData.recivers = 2
+            insertData.userId = values.recivers.parentId
         }
         sendNotification({
             variables: {...insertData}
@@ -79,7 +87,7 @@ const CreateNotification = () => {
     }
 
     if (loading) return <Loading/>;
-    if (error) return <Error message={error.message} onClick={refetch()}/>;
+    if (error) return <Error message={error.message} onClick={() => window.reload()}/>;
     return (<div>
         <Typography variant={'h2'}>
             Create Notification
@@ -88,7 +96,11 @@ const CreateNotification = () => {
             initialValues={{}}
             onSubmit={handleSubmit}
             enableReinitialize={true}
-            validationSchema={Yup.object().shape({})}
+            validationSchema={Yup.object().shape({
+                title: Yup.string().required("Title is required"),
+                message: Yup.string().required("Message is required"),
+                recivers: Yup.object().required("Receiver is required")
+            })}
         >
             {(props) => {
                 const {
@@ -135,16 +147,16 @@ const CreateNotification = () => {
                         <Grid item xs={12} md={6} lg={6}>
                             <Autocomplete
                                 disablePortal
-                                id="list"
+                                id="recivers"
                                 fullWidth
-                                value={values.list}
-                                name={"list"}
+                                value={values.recivers}
+                                name={"recivers"}
                                 onChange={(event, newValue) => {
-                                    props.setFieldValue("list", newValue);
+                                    props.setFieldValue("recivers", newValue);
                                 }}
                                 options={[...patients]}
-                                renderOption={(option) => option.firstName + " " + option.lastName}
-                                renderInput={(params) => <TextField {...params} label="Reciver"/>}
+                                getOptionLabel={(option) =>` ${option.firstName} ${option.lastName}`}
+                                renderInput={(params) => <TextField {...params} label="Receiver"/>}
 
                             />
                         </Grid>

@@ -83,3 +83,18 @@ export const ADD_APPOINTMENT = gql`
     }
 
 `
+export const CREATE_NOTIFICATION = gql`
+    mutation createNotification($title: String!, $message: String!, $recivers: Int!, $userId: bigint, $sentBy: bigint!) {
+        insert_notifications_one(object: {title: $title, message: $message, recivers: $recivers, userId: $userId, sentBy: $sentBy}) {
+            id
+        }
+    }
+
+`
+export const GET_TOPICS = gql`
+    mutation SubscribeToTopic( $token: String!, $topics: [String]!) {
+        subscribeToTopic( registrationToken: $token, topic: $topics){
+            status
+        }
+    }
+`

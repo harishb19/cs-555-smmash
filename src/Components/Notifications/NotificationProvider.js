@@ -1,10 +1,11 @@
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {useStoreActions, useStoreState} from "easy-peasy";
 import {toast} from "react-toastify";
 import {useMutation} from "@apollo/client";
 import {GET_TOPICS} from "../../graphql/mutation";
 import {getToken, onMessage} from 'firebase/messaging'
 import {useToasts} from "react-toast-notifications";
+import {Typography} from "@mui/material";
 
 const NotificationProvider = ({messaging}) => {
     const {addToast} = useToasts()
@@ -25,18 +26,31 @@ const NotificationProvider = ({messaging}) => {
                     let topics = [`${userDetails.id}-doctor-alert`, `${userDetails.id}-alert`, `alert`]
                     getNotification({
                         variables: {
-                            token: currentToken, topics, userId: userDetails.id
+                            token: currentToken, topics
                         }
                     }).then((e) => {
                         console.log("sub", e.data)
                         console.log("ok", messaging)
                         onMessage(messaging, (payload) => {
                             console.log('Message received. ', payload);
-                            addToast({
-                                title: payload.notification.title, body: payload.notification.body, ...payload.data
-                            }, {
-                                autoDismiss: true,
+                            toast(<>
+                                <Typography variant={'h5'} sx={{textAlign:'left'}}>
+                                    {payload.notification.title}
+                                </Typography>
+                               <Typography variant={'body1'} sx={{textAlign:'left'}}>
+                                      {payload.notification.body}
+                                </Typography>
+                            </>, {
+                                position: "top-center",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "dark",
                             })
+
                             setNotifications(payload)
                         })
                     }).catch((e) => {

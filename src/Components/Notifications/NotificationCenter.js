@@ -1,6 +1,5 @@
 import {useStoreActions, useStoreState} from "easy-peasy";
 import {
-    Avatar,
     Button,
     Dialog,
     DialogActions,
@@ -10,13 +9,12 @@ import {
     IconButton,
     List,
     ListItem,
-    ListItemAvatar,
     ListItemText,
     Tooltip,
     Typography
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {useLazyQuery, useMutation} from "@apollo/client";
+import {useLazyQuery} from "@apollo/client";
 import Loading from "../Loading/Loading";
 import Error from "../Error/CustomError";
 import {Delete} from "@mui/icons-material";
@@ -88,10 +86,6 @@ const ListView = ({id, coinId, coinIcon, title, body, createdAt, isDeleted}) => 
                 }
 
             >
-                <ListItemAvatar>
-                    <Avatar alt={coinId} src={coinIcon}/>
-
-                </ListItemAvatar>
                 <ListItemText primary={title} secondary={`${body} `}/>
                 <ListItemText secondary={formattedTime ? formattedTime : "now"}/>
 
@@ -140,7 +134,7 @@ const NotificationCenter = () => {
             }).then(({data}) => {
                 console.log("data")
 
-                setNotifications([...data.notification_log])
+                setNotifications([...data.notification_log,...data.allLog])
             })
         }
     }, [userDetails, fetchNotif, openNotifications, setNotifications])
@@ -150,7 +144,7 @@ const NotificationCenter = () => {
     return (<>
         <Dialog open={openNotifications} onClose={() => setOpenNotifications(false)} maxWidth={"md"} fullWidth>
             <DialogTitle sx={{
-                textAlign: "center", color: "white", minWidth: "400px", alignItems: "center",
+                textAlign: "center", minWidth: "400px", alignItems: "center",
                 letterSpacing: "3px", fontWeight: "bold"
             }} component={"p"}>Notification center</DialogTitle>
 
@@ -159,13 +153,11 @@ const NotificationCenter = () => {
                 {notifications.length <= 0 ? <Typography variant={"h5"}>No Notifications</Typography> :
 
                     <List sx={{width: '100%', bgcolor: 'background.paper'}}>
-                        {notifications.map(({id, data, notification, createdAt}, index) => <ListView
+                        {notifications.map(({id, title, message, createdAt}, index) => <ListView
                             key={index}
                             createdAt={createdAt}
-                            title={notification.title}
-                            body={notification.body}
-                            coinId={data.coinId}
-                            coinIcon={data.coinIcon}
+                            title={title}
+                            body={message}
                             id={id} index={index}/>)}
                     </List>}
             </DialogContent>
