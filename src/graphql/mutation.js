@@ -74,3 +74,12 @@ export const UPDATE_RECORD = gql`
         }
     }
 `
+
+export const ADD_APPOINTMENT = gql`
+    mutation insertAppointmentOne($object: appointment_insert_input!) {
+      insert_appointment_one(object: $object) {
+        id
+      }
+    }
+
+`
