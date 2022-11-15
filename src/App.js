@@ -27,6 +27,7 @@ import PreviousRecords from "./Components/Patient/PreviousRecords";
 import VaccineList from "./Components/Vaccine/VaccineList";
 import ScheduleAppointment from "./Components/Appointment/ScheduleAppointment";
 import PatientList from "./Components/Patient/PatientList";
+import AppointmentInfo from "./Components/Appointment/AppointmentInfo";
 
 const theme = createTheme({
     palette: {
@@ -113,7 +114,7 @@ function App() {
                                                    element={<ProtectedRoutes><AccountWrapper/></ProtectedRoutes>}/>
                                             <Route path='/vaccine' element={<ProtectedRoutes><VaccineList/></ProtectedRoutes>}/>
                                             <Route path='/appointment' element={<ProtectedRoutes><ScheduleAppointment/></ProtectedRoutes>}/>
-
+                                            <Route path='/appointment-info' element={<ProtectedRoutes><AppointmentInfo/></ProtectedRoutes>}/>
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>

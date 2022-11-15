@@ -158,3 +158,11 @@ export const GET_PATIENTS = gql`
     }
 
 `
+export const GET_APPOINTMENTS = gql`
+    query getAppointments($patientId: bigint!) {
+      appointment(where: {patientId: {_eq: $patientId}}) {
+        dateTime
+        notes
+      }
+    }
+`
