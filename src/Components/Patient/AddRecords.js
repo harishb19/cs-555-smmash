@@ -18,11 +18,9 @@ const AddRecords = ({patientId,refetch}) => {
     const {data, loading, error} = useQuery(GET_VACINES)
     const [insertRecord] = useMutation(INSERT_RECORDS)
     const validateSchema = {}
-    const handleSubmit = (value, {setFieldError, setSubmitting}) => {
+    const handleSubmit = (value, { setSubmitting}) => {
         setSubmitting(true)
         let insertData = []
-        console.log("-> value", value);
-        console.log("-> userDetails", userDetails);
         value.dosage.forEach((dosage) => {
             insertData.push({
                 dosageId: dosage.id,
@@ -31,7 +29,6 @@ const AddRecords = ({patientId,refetch}) => {
                 doctorId: patientId?userDetails.id:userDetails.patients[0].doctorId
             })
         })
-        console.log("-> insertData", insertData);
         insertRecord({variables: {objects: insertData}}).then(res => {
             toast.success(`Records inserted`, {
                 position: "bottom-right",

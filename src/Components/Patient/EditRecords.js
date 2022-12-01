@@ -19,7 +19,7 @@ const EditRecords = ({editDetails, refetch}) => {
     const {data, loading, error} = useQuery(GET_VACINES)
     const [updateRecord] = useMutation(UPDATE_RECORD)
     const validateSchema = {}
-    const handleSubmit = (value, {setFieldError, setSubmitting}) => {
+    const handleSubmit = (value, {setSubmitting}) => {
         setSubmitting(true)
         updateRecord({
             variables: {
