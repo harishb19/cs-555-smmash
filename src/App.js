@@ -31,6 +31,7 @@ import AppointmentInfo from "./Components/Appointment/AppointmentInfo";
 import NotificationList from "./Components/Notifications/NotificationList";
 import CreateNotification from "./Components/Notifications/CreateNotification";
 import NotificationCenter from "./Components/Notifications/NotificationCenter";
+import FindNearby from "./Components/Map/FindNearby";
 
 const theme = createTheme({
     palette: {
@@ -122,6 +123,8 @@ function App() {
                                                    element={<ProtectedRoutes blockedFor={'patient'}><NotificationList/></ProtectedRoutes>}/>
                                             <Route path='/notification/create' element={<ProtectedRoutes
                                                 blockedFor={'patient'}><CreateNotification/></ProtectedRoutes>}/>
+                                            <Route path='/map'
+                                                   element={<ProtectedRoutes><FindNearby/></ProtectedRoutes>}/>
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>
