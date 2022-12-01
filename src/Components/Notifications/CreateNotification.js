@@ -155,7 +155,7 @@ const CreateNotification = () => {
                                     props.setFieldValue("recivers", newValue);
                                 }}
                                 options={[...patients]}
-                                getOptionLabel={(option) =>` ${option.firstName} ${option.lastName}`}
+                                getOptionLabel={(option) => ` ${option.firstName} ${option.lastName}`}
                                 renderInput={(params) => <TextField {...params} label="Receiver"/>}
 
                             />

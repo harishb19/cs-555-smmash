@@ -34,11 +34,11 @@ const NotificationProvider = ({messaging}) => {
                         onMessage(messaging, (payload) => {
                             console.log('Message received. ', payload);
                             toast(<>
-                                <Typography variant={'h5'} sx={{textAlign:'left'}}>
+                                <Typography variant={'h5'} sx={{textAlign: 'left'}}>
                                     {payload.notification.title}
                                 </Typography>
-                               <Typography variant={'body1'} sx={{textAlign:'left'}}>
-                                      {payload.notification.body}
+                                <Typography variant={'body1'} sx={{textAlign: 'left'}}>
+                                    {payload.notification.body}
                                 </Typography>
                             </>, {
                                 position: "top-center",

@@ -12,21 +12,21 @@ import {INSERT_RECORDS} from "../../graphql/mutation";
 import {toast} from "react-toastify";
 import {CalendarMonth} from "@mui/icons-material";
 
-const AddRecords = ({patientId,refetch}) => {
+const AddRecords = ({patientId, refetch}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const [vaccines, setVaccines] = useState([]);
     const {data, loading, error} = useQuery(GET_VACINES)
     const [insertRecord] = useMutation(INSERT_RECORDS)
     const validateSchema = {}
-    const handleSubmit = (value, { setSubmitting}) => {
+    const handleSubmit = (value, {setSubmitting}) => {
         setSubmitting(true)
         let insertData = []
         value.dosage.forEach((dosage) => {
             insertData.push({
                 dosageId: dosage.id,
                 dosageInformation: value.dosageInformation,
-                patientId: patientId??userDetails.patients[0].id,
-                doctorId: patientId?userDetails.id:userDetails.patients[0].doctorId
+                patientId: patientId ?? userDetails.patients[0].id,
+                doctorId: patientId ? userDetails.id : userDetails.patients[0].doctorId
             })
         })
         insertRecord({variables: {objects: insertData}}).then(res => {
@@ -104,27 +104,27 @@ const AddRecords = ({patientId,refetch}) => {
                     </Grid>
                     <Grid item lg={12}/>
                     <Grid item xs={12} md={6} lg={6}>
-                            <InputLabel htmlFor="dosageInformation">Date of vaccine</InputLabel>
-                            <TextField
-                                type="date"
-                                id={"dosageInformation"}
-                                name={"dosageInformation"}
-                                value={values.dosageInformation}
-                                onChange={handleChange}
-                                variant={"outlined"}
-                                fullWidth
-                                onBlur={handleBlur}
-                                className={loginStyle.inputbox}
-                                InputProps={{
-                                    startAdornment: (<InputAdornment position="start">
-                                        <CalendarMonth/>
-                                    </InputAdornment>),
-                                }}
-                            />
-                            <p className={`${loginStyle.error}`}>
-                                {(errors.dosageInformation && touched.dosageInformation) && errors.dosageInformation}
-                            </p>
-                        </Grid>
+                        <InputLabel htmlFor="dosageInformation">Date of vaccine</InputLabel>
+                        <TextField
+                            type="date"
+                            id={"dosageInformation"}
+                            name={"dosageInformation"}
+                            value={values.dosageInformation}
+                            onChange={handleChange}
+                            variant={"outlined"}
+                            fullWidth
+                            onBlur={handleBlur}
+                            className={loginStyle.inputbox}
+                            InputProps={{
+                                startAdornment: (<InputAdornment position="start">
+                                    <CalendarMonth/>
+                                </InputAdornment>),
+                            }}
+                        />
+                        <p className={`${loginStyle.error}`}>
+                            {(errors.dosageInformation && touched.dosageInformation) && errors.dosageInformation}
+                        </p>
+                    </Grid>
 
 
                     <Grid item xs={12}>

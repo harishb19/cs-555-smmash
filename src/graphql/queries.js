@@ -125,16 +125,16 @@ export const GET_VACINES = gql`
 `
 export const GET_VACCINE_LIST = gql`
     query getVaccineList{
-      vaccines{
-        id
-        vaccineName
-        sideEffect
-        dosages{
-          doseNumber
-          startTimeMos
-          endTimeMos
+        vaccines{
+            id
+            vaccineName
+            sideEffect
+            dosages{
+                doseNumber
+                startTimeMos
+                endTimeMos
+            }
         }
-      }
     }
 `
 
@@ -160,10 +160,10 @@ export const GET_PATIENTS = gql`
 `
 export const GET_APPOINTMENTS = gql`
     query getAppointments($patientId: bigint!) {
-      appointment(where: {patientId: {_eq: $patientId}}) {
-        dateTime
-        notes
-      }
+        appointment(where: {patientId: {_eq: $patientId}}) {
+            dateTime
+            notes
+        }
     }
 `
 export const GET_NOTIFICATIONS = gql`

@@ -134,7 +134,7 @@ const NotificationCenter = () => {
             }).then(({data}) => {
                 console.log("data")
 
-                setNotifications([...data.notification_log,...data.allLog])
+                setNotifications([...data.notification_log, ...data.allLog])
             })
         }
     }, [userDetails, fetchNotif, openNotifications, setNotifications])

@@ -109,16 +109,20 @@ function App() {
                                             <Route path="/auth/signup/doctor"
                                                    element={<LoginCheck><Signup type={'doctor'}/></LoginCheck>}/>
                                             <Route path='/patients/new'
-                                                   element={<ProtectedRoutes type={'doctor'}><UsersList/></ProtectedRoutes>}/>
+                                                   element={<ProtectedRoutes
+                                                       type={'doctor'}><UsersList/></ProtectedRoutes>}/>
                                             <Route path='/patients/list' element={<ProtectedRoutes
                                                 role={'doctor'}><PatientList/></ProtectedRoutes>}/>
                                             <Route path='/records/list' element={<ProtectedRoutes
                                                 role={'patient'}><PreviousRecords/></ProtectedRoutes>}/>
                                             <Route path='/profile'
                                                    element={<ProtectedRoutes><AccountWrapper/></ProtectedRoutes>}/>
-                                            <Route path='/vaccine' element={<ProtectedRoutes><VaccineList/></ProtectedRoutes>}/>
-                                            <Route path='/appointment' element={<ProtectedRoutes><ScheduleAppointment/></ProtectedRoutes>}/>
-                                            <Route path='/appointment-info' element={<ProtectedRoutes><AppointmentInfo/></ProtectedRoutes>}/>
+                                            <Route path='/vaccine'
+                                                   element={<ProtectedRoutes><VaccineList/></ProtectedRoutes>}/>
+                                            <Route path='/appointment'
+                                                   element={<ProtectedRoutes><ScheduleAppointment/></ProtectedRoutes>}/>
+                                            <Route path='/appointment-info'
+                                                   element={<ProtectedRoutes><AppointmentInfo/></ProtectedRoutes>}/>
                                             <Route path='/notification'
                                                    element={<ProtectedRoutes blockedFor={'patient'}><NotificationList/></ProtectedRoutes>}/>
                                             <Route path='/notification/create' element={<ProtectedRoutes

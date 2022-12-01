@@ -9,10 +9,10 @@ import {Add} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 const NotificationList = () => {
-    const navigate=useNavigate() ;
+    const navigate = useNavigate();
     const userDetails = useStoreState(state => state.user.userDetails)
-    const [fetchData, {data, loading, error}] = useLazyQuery(GET_NOTIFICATIONS,{
-        fetchPolicy:'network-only'
+    const [fetchData, {data, loading, error}] = useLazyQuery(GET_NOTIFICATIONS, {
+        fetchPolicy: 'network-only'
     })
     useEffect(() => {
         if (userDetails && userDetails.id) {

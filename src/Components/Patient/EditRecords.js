@@ -1,6 +1,6 @@
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {Autocomplete, Box, Button, Grid, InputAdornment, InputLabel, TextField} from "@mui/material";
+import {Autocomplete, Button, Grid, InputAdornment, InputLabel, TextField} from "@mui/material";
 import loginStyle from "../Auth/css/login.module.css";
 import React, {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
@@ -69,7 +69,7 @@ const EditRecords = ({editDetails, refetch}) => {
         if (editDetails && !isEmpty(editDetails)) {
             setInitialValues({
                 dosage: editDetails.dosage,
-                dosageInformation: format(new Date(editDetails.dosageInformation),'yyyy-MM-dd')
+                dosageInformation: format(new Date(editDetails.dosageInformation), 'yyyy-MM-dd')
             })
         }
     }, [editDetails])
