@@ -14,13 +14,17 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
 import {
-    AccountCircle, Event,
+    AccountCircle,
+    BookOnline,
+    Event,
     FactCheck,
     Healing,
     Home,
     Login,
     Logout,
-    PeopleAlt
+    Notifications,
+    PeopleAlt,
+    Place
 } from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";
@@ -147,7 +151,7 @@ const NormalNav = ({children}) => {
 
                 {userDetails && userDetails.id && <>
                     {
-                        userDetails.role.name === "admin" &&<ListItemButton
+                        userDetails.role.name === "admin" && <ListItemButton
                             sx={{
                                 minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
                             }}
@@ -200,11 +204,32 @@ const NormalNav = ({children}) => {
                                         minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                   <Healing/>
+                                    <Healing/>
                                 </ListItemIcon>
                             </Tooltip>
                             <ListItemText primary={"Records list"} sx={{opacity: open ? 1 : 0}}/>
                         </ListItemButton>
+                    }
+                    {
+                        userDetails.roleId !== 2 && (
+                            <ListItemButton
+                                sx={{
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                                }}
+                                onClick={() => navigate("/notification")}
+                            >
+                                <Tooltip title={"Notification"} placement={"right"}>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Notifications/>
+                                    </ListItemIcon>
+                                </Tooltip>
+                                <ListItemText primary={"Notification"} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        )
                     }
                     <ListItemButton
                         sx={{
@@ -241,6 +266,42 @@ const NormalNav = ({children}) => {
                             </ListItemIcon>
                         </Tooltip>
                         <ListItemText primary={"Book Appointment"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                        }}
+                        onClick={() => navigate("/appointment-info")}
+                    >
+                        <Tooltip title={"Appointment Info"} placement={"right"}>
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                <BookOnline/>
+
+                            </ListItemIcon>
+                        </Tooltip>
+                        <ListItemText primary={"Appointment Info"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                        }}
+                        onClick={() => navigate("/map")}
+                    >
+                        <Tooltip title={"Map"} placement={"right"}>
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                <Place/>
+
+                            </ListItemIcon>
+                        </Tooltip>
+                        <ListItemText primary={"Map"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
                     <ListItemButton
                         sx={{
