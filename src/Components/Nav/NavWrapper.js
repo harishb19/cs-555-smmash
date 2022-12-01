@@ -14,7 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PrimaryAppBar, {NotificationBadge, UserProfile} from "./PrimaryAppBar";
 import {
-    AccountCircle, BookOnline,
+    AccountCircle,
+    BookOnline,
     Event,
     FactCheck,
     Healing,
@@ -22,7 +23,8 @@ import {
     Login,
     Logout,
     Notifications,
-    PeopleAlt, Place
+    PeopleAlt,
+    Place
 } from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";

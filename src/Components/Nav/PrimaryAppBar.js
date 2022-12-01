@@ -120,7 +120,7 @@ const PrimaryAppBar = ({onClick, open}) => {
                     }
                     }
             >
-            SMMASH
+                SMMASH
 
             </Button>
 
@@ -181,7 +181,7 @@ const PrimaryAppBar = ({onClick, open}) => {
                         transformOrigin={{horizontal: 'right', vertical: 'top'}}
                         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                     >
-                        <MenuItem onClick={()=>handleProfileMenuOpen()}>
+                        <MenuItem onClick={() => handleProfileMenuOpen()}>
                             <Person/> Profile
                         </MenuItem>
                         <MenuItem>
