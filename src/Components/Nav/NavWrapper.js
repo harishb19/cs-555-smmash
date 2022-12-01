@@ -22,7 +22,7 @@ import {
     Login,
     Logout,
     Notifications,
-    PeopleAlt
+    PeopleAlt, Place
 } from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import Toolbar from "@mui/material/Toolbar";
@@ -282,6 +282,24 @@ const NormalNav = ({children}) => {
                             </ListItemIcon>
                         </Tooltip>
                         <ListItemText primary={"Appointment Info"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                        }}
+                        onClick={() => navigate("/map")}
+                    >
+                        <Tooltip title={"Map"} placement={"right"}>
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                <Place/>
+
+                            </ListItemIcon>
+                        </Tooltip>
+                        <ListItemText primary={"Map"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
                     <ListItemButton
                         sx={{
