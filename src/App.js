@@ -28,6 +28,10 @@ import VaccineList from "./Components/Vaccine/VaccineList";
 import ScheduleAppointment from "./Components/Appointment/ScheduleAppointment";
 import PatientList from "./Components/Patient/PatientList";
 import AppointmentInfo from "./Components/Appointment/AppointmentInfo";
+import NotificationList from "./Components/Notifications/NotificationList";
+import CreateNotification from "./Components/Notifications/CreateNotification";
+import NotificationCenter from "./Components/Notifications/NotificationCenter";
+import FindNearby from "./Components/Map/FindNearby";
 
 const theme = createTheme({
     palette: {
@@ -115,9 +119,17 @@ function App() {
                                             <Route path='/vaccine' element={<ProtectedRoutes><VaccineList/></ProtectedRoutes>}/>
                                             <Route path='/appointment' element={<ProtectedRoutes><ScheduleAppointment/></ProtectedRoutes>}/>
                                             <Route path='/appointment-info' element={<ProtectedRoutes><AppointmentInfo/></ProtectedRoutes>}/>
+                                            <Route path='/notification'
+                                                   element={<ProtectedRoutes blockedFor={'patient'}><NotificationList/></ProtectedRoutes>}/>
+                                            <Route path='/notification/create' element={<ProtectedRoutes
+                                                blockedFor={'patient'}><CreateNotification/></ProtectedRoutes>}/>
+                                            <Route path='/map'
+                                                   element={<ProtectedRoutes><FindNearby/></ProtectedRoutes>}/>
                                             <Route path="*" element={<PageNotFound/>}/>
                                         </Routes>
                                     </NavWrapper>
+                                    <NotificationCenter/>
+
                                 </AuthProvider>
                                 <ToastContainer
                                     position="bottom-right"

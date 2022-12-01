@@ -166,3 +166,38 @@ export const GET_APPOINTMENTS = gql`
       }
     }
 `
+export const GET_NOTIFICATIONS = gql`
+    query getAllNotification($where: notifications_bool_exp) {
+        notifications(where: $where){
+            id
+            title
+            message
+            recivers
+            user{
+                firstName
+                lastName
+            }
+            sentBy
+        }
+    }
+`
+
+export const GET_NOTIFICATION_LOGS = gql`
+    query getNotificationLogs($userId: bigint!) {
+        allLog:notification_log(where: {user_id: {_is_null:true}}) {
+            id
+            message
+            title
+            topic
+            createdAt
+        }
+        notification_log(where: {user_id: {_eq: $userId}}) {
+            id
+            message
+            title
+            topic
+            createdAt
+        }
+    }
+
+`

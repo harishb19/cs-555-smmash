@@ -7,6 +7,7 @@ import {useStoreActions} from "easy-peasy";
 import Loading from "../Loading/Loading";
 import {firebaseConfig} from "../../config/firebase";
 import {getMessaging, isSupported} from 'firebase/messaging'
+import NotificationProvider from "../Notifications/NotificationProvider";
 
 const AuthUserProvider = ({children}) => {
 
@@ -85,7 +86,9 @@ const AuthUserProvider = ({children}) => {
     }, [fetchUser, setUserDetails, setIsPasswordProvider, setUserImage]);
 
     if (processing) return <div style={{height: "100vh"}}><Loading/></div>;
-    return (<>{children}</>)
+    return (<>
+        <NotificationProvider messaging={messaging}/>
+        {children}</>)
 }
 
 export default AuthUserProvider

@@ -1,4 +1,4 @@
-const PatientAccount= () => {
+const PatientAccount = () => {
     return (
         <div>
             <h1>Patient Account</h1>
