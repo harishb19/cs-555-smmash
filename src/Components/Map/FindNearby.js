@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const FindNearby = () => {
 
-    return(
+    return (
         <>
             <h1>Nearby Hospitals and Pharmacies</h1>
             <div id="map">

@@ -18,66 +18,66 @@ const DoctorAccount = () => {
             margin: '2em auto',
         }}>
 
-                <Formik
-                    initialValues={{...initialValue}}
-                    onSubmit={handleSubmit}
-                    enableReinitialize={true}
-                    validationSchema={Yup.object().shape({...validateSchema})}
-                >
-                    {(props) => {
-                        const {
-                            values,
-                            touched,
-                            errors,
-                            dirty,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                            isValid,
-                            isSubmitting
-                        } = props;
-                        return (<form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={6} lg={6}>
-                                    <Autocomplete
-                                        disablePortal
-                                        id="qualification"
-                                        fullWidth
-                                        multiple
-                                        value={values.qualification}
-                                        name={"qualification"}
-                                        onChange={(event, newValue) => {
-                                            props.setFieldValue("qualification", newValue);
-                                        }}
-                                        options={['M.D', 'M.B.B.S', 'M.S', 'M.D.S', 'Ph.D.', 'D.O']}
-                                        renderInput={(params) => <TextField {...params} label="Qualification"/>}
-                                        sx={{
-                                            width: 600,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={12}/>
-                                <Grid item xs={12} md={6} lg={6}>
-                                    <TextField id="address" label="Address" variant="outlined" multiline fullWidth/>
-
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Button variant={"contained"} color={"secondary"}
-                                            className={`${loginStyle.button}`}
-                                            disabled={isSubmitting || !(isValid && dirty)}
-                                            type={"submit"}
-                                    >
-                                        Save
-                                    </Button>
-
-                                </Grid>
+            <Formik
+                initialValues={{...initialValue}}
+                onSubmit={handleSubmit}
+                enableReinitialize={true}
+                validationSchema={Yup.object().shape({...validateSchema})}
+            >
+                {(props) => {
+                    const {
+                        values,
+                        touched,
+                        errors,
+                        dirty,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        isValid,
+                        isSubmitting
+                    } = props;
+                    return (<form onSubmit={handleSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6} lg={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="qualification"
+                                    fullWidth
+                                    multiple
+                                    value={values.qualification}
+                                    name={"qualification"}
+                                    onChange={(event, newValue) => {
+                                        props.setFieldValue("qualification", newValue);
+                                    }}
+                                    options={['M.D', 'M.B.B.S', 'M.S', 'M.D.S', 'Ph.D.', 'D.O']}
+                                    renderInput={(params) => <TextField {...params} label="Qualification"/>}
+                                    sx={{
+                                        width: 600,
+                                    }}
+                                />
                             </Grid>
+                            <Grid item lg={12}/>
+                            <Grid item xs={12} md={6} lg={6}>
+                                <TextField id="address" label="Address" variant="outlined" multiline fullWidth/>
+
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button variant={"contained"} color={"secondary"}
+                                        className={`${loginStyle.button}`}
+                                        disabled={isSubmitting || !(isValid && dirty)}
+                                        type={"submit"}
+                                >
+                                    Save
+                                </Button>
+
+                            </Grid>
+                        </Grid>
 
 
-                        </form>)
-                    }}
+                    </form>)
+                }}
 
-                </Formik>
+            </Formik>
         </Box>
     )
 }

@@ -39,7 +39,7 @@ const VaccineList = () => {
         >
 
 
-            {vaccines.map(vaccine =><ListItem key={vaccine.id}> <Vaccine  vaccine={vaccine}/></ListItem>)}
+            {vaccines.map(vaccine => <ListItem key={vaccine.id}> <Vaccine vaccine={vaccine}/></ListItem>)}
 
         </List>
 
