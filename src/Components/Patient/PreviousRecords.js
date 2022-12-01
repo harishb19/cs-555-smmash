@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Loading from "../Loading/Loading";
 import Error from "../Error/CustomError";
-import {useMutation, useQuery, useSubscription} from "@apollo/client";
-import {GET_PATIENT_RECORDS, GET_PATIENT_RECORDS_SUB} from "../../graphql/queries";
+import {useMutation, useSubscription} from "@apollo/client";
+import {GET_PATIENT_RECORDS_SUB} from "../../graphql/queries";
 import {useStoreState} from "easy-peasy";
 import {
     Dialog,
@@ -103,7 +103,9 @@ const PreviousRecords = ({patientId}) => {
             <Dialog onClose={() => setEditDetails({})} open={!isEmpty(editDetails)}>
                 <DialogTitle>Edit records</DialogTitle>
                 <DialogContent>
-                    <EditRecords editDetails={editDetails} refetch={()=>{console.log('ok')}}/>
+                    <EditRecords editDetails={editDetails} refetch={() => {
+                        console.log('ok')
+                    }}/>
                 </DialogContent>
 
             </Dialog>
@@ -131,7 +133,7 @@ const PreviousRecords = ({patientId}) => {
                 <DialogContentText>
                     Add a previous/new record
                 </DialogContentText>
-                <AddRecords refetch={()=>console.log("ok")}/>
+                <AddRecords refetch={() => console.log("ok")}/>
             </DialogContent>
 
         </Dialog>
