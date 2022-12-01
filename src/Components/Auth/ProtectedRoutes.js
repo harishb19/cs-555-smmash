@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {useEffect} from "react";
 
-const ProtectedRoutes = ({children,role,blockedFor}) => {
+const ProtectedRoutes = ({children, role, blockedFor}) => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const navigate = useNavigate()
 
