@@ -42,7 +42,7 @@ const AppointmentInfo = () => {
         }
     }, [data, loading])
     useEffect(() => {
-        if (userDetails && userDetails.id) {
+        if (userDetails && userDetails.id &&  userDetails.patients.length > 0) {
             fetchData({
                 variables: {
                     patientId: userDetails.patients[0].id
