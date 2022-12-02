@@ -201,3 +201,25 @@ export const GET_NOTIFICATION_LOGS = gql`
     }
 
 `
+
+export const GET_PARENTS = gql`
+    query parents {
+        parents:users(where: {roleId: {_eq: 2}}) {
+            id
+            firstName
+            lastName
+            email
+        }
+    }
+
+`
+
+export const GET_DOCTORS = gql`
+    query getDoctor($doctorId: bigint!) {
+  doctor(where: {doctorId: {_eq: $doctorId}}) {
+    qualification
+    id
+    address
+  }
+}
+`

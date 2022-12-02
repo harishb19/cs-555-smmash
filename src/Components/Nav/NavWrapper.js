@@ -131,23 +131,23 @@ const NormalNav = ({children}) => {
             </DrawerHeader>
             <Divider/>
             <List>
-                <ListItemButton
-                    sx={{
-                        minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-                    }}
-                    onClick={() => navigate("/")}
-                >
-                    <Tooltip title={"Home"} placement={"right"}>
-                        <ListItemIcon
-                            sx={{
-                                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                            }}
-                        >
-                            <Home/>
-                        </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary={"Home"} sx={{opacity: open ? 1 : 0}}/>
-                </ListItemButton>
+                {/*<ListItemButton*/}
+                {/*    sx={{*/}
+                {/*        minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,*/}
+                {/*    }}*/}
+                {/*    onClick={() => navigate("/")}*/}
+                {/*>*/}
+                {/*    <Tooltip title={"Home"} placement={"right"}>*/}
+                {/*        <ListItemIcon*/}
+                {/*            sx={{*/}
+                {/*                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',*/}
+                {/*            }}*/}
+                {/*        >*/}
+                {/*            <Home/>*/}
+                {/*        </ListItemIcon>*/}
+                {/*    </Tooltip>*/}
+                {/*    <ListItemText primary={"Home"} sx={{opacity: open ? 1 : 0}}/>*/}
+                {/*</ListItemButton>*/}
 
                 {userDetails && userDetails.id && <>
                     {
@@ -249,7 +249,8 @@ const NormalNav = ({children}) => {
                         </Tooltip>
                         <ListItemText primary={"Profile"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
-                    <ListItemButton
+                    {
+                        userDetails.roleId === 2 && ( <ListItemButton
                         sx={{
                             minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
                         }}
@@ -267,6 +268,7 @@ const NormalNav = ({children}) => {
                         </Tooltip>
                         <ListItemText primary={"Book Appointment"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
+                        )}
                     <ListItemButton
                         sx={{
                             minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,

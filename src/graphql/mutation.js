@@ -98,3 +98,19 @@ export const GET_TOPICS = gql`
         }
     }
 `
+
+export const INSERT_PATIENT = gql`
+    mutation MyMutation($object: patient_insert_input!) {
+        insert_patient_one(object: $object) {
+            id
+        }
+    }
+`
+
+export const INSERT_DOCTOR = gql`
+    mutation MyMutation($object: doctor_insert_input!) {
+        insert_doctor_one(object: $object){
+            id
+        }
+    }
+`

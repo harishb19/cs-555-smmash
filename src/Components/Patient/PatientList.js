@@ -5,8 +5,8 @@ import Loading from "../Loading/Loading";
 import {GET_PATIENTS} from "../../graphql/queries";
 import {
     Dialog,
-    DialogContent,
-    DialogTitle,
+    DialogContent, DialogContentText,
+    DialogTitle, Fab,
     Grid,
     IconButton,
     List,
@@ -17,11 +17,12 @@ import {
     TextField,
     Tooltip
 } from "@mui/material";
-import {AddBox, FactCheck} from "@mui/icons-material";
+import {Add, AddBox, FactCheck} from "@mui/icons-material";
 import {useStoreState} from "easy-peasy";
 import PreviousRecords from "./PreviousRecords";
 import {differenceInMonths, differenceInYears} from "date-fns";
 import AddRecords from "./AddRecords";
+import AddChildrean from "../Users/AddChildrean";
 
 const Patient = ({patient, refetch}) => {
     const [openDetails, setOpenDetails] = useState(false)
@@ -160,6 +161,7 @@ const Patient = ({patient, refetch}) => {
 const PatientList = () => {
     const userDetails = useStoreState(state => state.user.userDetails)
     const [patients, setPatients] = useState([]);
+    const [open, setOpen] = useState(false);
     const {data, loading, error, refetch} = useQuery(GET_PATIENTS, {
         variables: {
             doctorId: userDetails.id
@@ -181,7 +183,27 @@ const PatientList = () => {
         >
             {patients.map(patient => <Patient key={patient.id} patient={patient} refetch={refetch}/>)}
         </List>
+        <Dialog onClose={() => setOpen(!open)} open={open}>
+            <DialogTitle>Insert records</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Add a patient
+                </DialogContentText>
+                <AddChildrean onClose={()=>{
+                    refetch()
+                    setOpen(false)
+                }}/>
+            </DialogContent>
 
+        </Dialog>
+        <Fab variant="extended" sx={{
+            position: "fixed", bottom: 10, right: 10
+        }}
+             onClick={() => setOpen(!open)}>
+
+            <Add sx={{mr: 1}}/>
+            Patient
+        </Fab>
     </div>);
 }
 
