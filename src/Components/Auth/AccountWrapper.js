@@ -11,7 +11,7 @@ const AccountWrapper = () => {
             return <AdminAccount/>
         case 1:
             return <DoctorAccount/>
-        case 1:
+        case 2:
             return <PatientAccount/>
     }
 }
